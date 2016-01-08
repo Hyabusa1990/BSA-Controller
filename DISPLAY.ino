@@ -6,6 +6,13 @@ void print_Display() {
       lcd.print(strDisplay[i]);
       Serial.println(strDisplay[i]);
     }
+    Serial.print(state_Red);
+    Serial.print(state_Green);
+    Serial.print(state_Yellow);
+    Serial.print(state_Horn);
+    Serial.print(firstRunFinished);
+    Serial.print(clock_time);
+    Serial.println(count_Horn);
     change_strDisplay = false;
   }
 }
@@ -111,6 +118,14 @@ void display_Ampel() {
     }
   }
 
+  if (state_Horn) {
+    for (int i = 0; i < ((LCD_COL / 2) - (1 + line1)); i++) {
+      strDisplay[0] += " ";
+    }
+    strDisplay[0] += char('\377');
+    line1 = strDisplay[0].length();
+  }
+
   if (state_Red) {
     for (int i = 0; i < (LCD_COL - (3 + line1)); i++) {
       strDisplay[0] += " ";
@@ -127,8 +142,9 @@ void display_Ampel() {
     for (int i = 0; i < (LCD_COL - (5 + line1)); i++) {
       strDisplay[0] += " ";
     }
-    strDisplay[0] += "Gruen";
+    strDisplay[0] += "GRUEN";
   }
+
   strDisplay[1] = "";
   int center = (LCD_COL - String(clock_time).length()) / 2;
   for (int i = 0; i < center; i++) {
@@ -138,11 +154,16 @@ void display_Ampel() {
 
   int line3 = String(vorlaufzeit).length();
   strDisplay[2] = String(vorlaufzeit);
-  for (int i = 0; i < (LCD_COL - (String(schusszeit).length() + line3)); i++) {
+  for (int i = 0; i < (LCD_COL - ((String(schusszeit).length()) + line3)); i++) {
     strDisplay[2] += " ";
   }
   strDisplay[2] += String(schusszeit);
 
-  strDisplay[3] = "Menue mit #";
+  if (!runTime) {
+    strDisplay[3] = "Menue mit #";
+  }
+  else {
+    strDisplay[3] = "       ";
+  }
 }
 

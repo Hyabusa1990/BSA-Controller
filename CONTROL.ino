@@ -20,11 +20,14 @@ void cont_startup() {
           display_Startup();
           break;
         case '#':
+          firstRunFinished = !abcd;
           startup = false;
           show_ampel = true;
           clock_time = vorlaufzeit;
           display_Ampel();
           count_clock = true;
+          count_Horn = 2;
+          runTime = true;
           break;
         default:
           break;
@@ -94,7 +97,7 @@ void cont_vorlauf() {
 }
 
 void cont_ampel() {
-  if (count_clock && clock_time >= 0) {
+  if (count_clock && clock_time > 0) {
     if (!vorlauf) {
       clock_displ = clock_time;
       if (clock_time > 30) {
@@ -110,22 +113,61 @@ void cont_ampel() {
     }
     else {
       clock_displ = vorlaufzeit - clock_time;
-
-    }
-    if (show_ampel) {
-      display_Ampel();
     }
   }
   else if (count_clock) {
     if (vorlauf) {
       clock_time = schusszeit;
       vorlauf = false;
+      count_Horn = 1;
     }
-    if (clock_time <= 0) {
-      state_Red = true;
-      state_Yellow = false;
-      state_Green = false;
+    else if (abcd && !firstRunFinished) {
+      firstRunFinished = true;
+      ab = !ab;
+      clock_time = vorlaufzeit;
+      vorlauf = true;
+      count_Horn = 2;
     }
+    else if (runTime) {
+      clock_displ = schusszeit;
+      count_Horn = 3;
+      runTime = false;
+    }
+  }
+
+  if (clock_time <= 0 || vorlauf) {
+    state_Red = true;
+    state_Yellow = false;
+    state_Green = false;
+  }
+
+  if (show_ampel) {
+    display_Ampel();
+  }
+
+  if (!runTime) {
+    char key = keypad.getKey();
+    if (key == '#') {
+      firstRunFinished = !abcd;
+      clock_time = vorlaufzeit;
+      display_Ampel();
+      count_Horn = 2;
+      runTime = true;
+      vorlauf = true;
+    }
+  }
+}
+
+void cont_horn() {
+  if (count_Horn > 0 || state_Horn) {
+    state_Horn = !state_Horn;
+    
+    if (state_Horn) {
+      count_Horn--;
+    }
+    
+    display_Ampel();
+    change_strDisplay = true;
   }
 }
 

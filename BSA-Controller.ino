@@ -39,6 +39,7 @@ Timer tim_initial;      //Timer für initial Bildschirm
 Timer tim_counter;      //Timer für zähler
 Timer tim_update;       //Timer für Schnittstellen update
 Timer tim_ampel;        //Timer für Ampel update
+Timer tim_horn;         //Timer für Horn
 
 bool initial = false;
 
@@ -56,7 +57,10 @@ bool state_Red = true;
 bool state_Yellow = false;
 bool state_Green = false;
 bool state_Horn = false;
+int count_Horn = 0;
 bool count_clock = false;
+bool firstRunFinished = true;
+bool runTime = false;
 bool vorlauf = true;
 int clock_time = 120;
 int clock_displ = 120;
@@ -70,6 +74,7 @@ void setup() {
   tim_initial.every(10000, display_Startup, 1);
   tim_counter.every(1000, count_time);
   tim_ampel.every(10, cont_ampel);
+  tim_horn.every(500, cont_horn);
 }
 
 void loop() {
@@ -80,6 +85,7 @@ void loop() {
   tim_initial.update();
   tim_counter.update();
   tim_ampel.update();
+  tim_horn.update();
 }
 
 
