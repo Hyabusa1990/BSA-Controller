@@ -68,6 +68,7 @@ int clock_displ = 120;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  Serial1.begin(9600);
   lcd.begin(LCD_COL, LCD_ROW);
   lcd.display();
   display_initialScreen();
@@ -75,6 +76,7 @@ void setup() {
   tim_counter.every(1000, count_time);
   tim_ampel.every(10, cont_ampel);
   tim_horn.every(500, cont_horn);
+  tim_update.every(100, cont_serial);
 }
 
 void loop() {
@@ -86,6 +88,7 @@ void loop() {
   tim_counter.update();
   tim_ampel.update();
   tim_horn.update();
+  tim_update.update();
 }
 
 

@@ -171,3 +171,50 @@ void cont_horn() {
   }
 }
 
+void cont_serial() {
+  String output = "";
+  if(state_Red){
+    output += "1";
+  }
+  else{
+    output += "0";
+  }
+
+  if(state_Yellow){
+    output += "1";
+  }
+  else{
+    output += "0";
+  }
+
+  if(state_Green){
+    output += "1";
+  }
+  else{
+    output += "0";
+  }
+
+  if(state_Horn){
+    output += "1";
+  }
+  else{
+    output += "0";
+  }
+
+  if(abcd){
+    if(ab){
+      output += "1";
+    }
+    else{
+      output += "2";
+    }
+  }
+  else{
+    output += "0";
+  }
+
+  output += String(clock_displ);
+
+  Serial1.println(output);
+}
+
