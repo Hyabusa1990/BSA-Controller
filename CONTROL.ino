@@ -25,9 +25,8 @@ void cont_startup() {
           show_ampel = true;
           clock_time = vorlaufzeit;
           display_Ampel();
-          count_clock = true;
-          count_Horn = 2;
-          runTime = true;
+          change_strDisplay = true;
+          print_Display();
           break;
         default:
           break;
@@ -86,9 +85,6 @@ void cont_vorlauf() {
       display_ZeitSetting();
     }
     else if ( key != NO_KEY && key == '#') {
-      if (vorlaufzeit == 0) {
-        vorlaufzeit = 10;
-      }
       input_vorlauf = false;
       startup = true;
       display_Startup();
@@ -143,18 +139,6 @@ void cont_ampel() {
 
   if (show_ampel) {
     display_Ampel();
-  }
-
-  if (!runTime) {
-    char key = keypad.getKey();
-    if (key == '#') {
-      firstRunFinished = !abcd;
-      clock_time = vorlaufzeit;
-      display_Ampel();
-      count_Horn = 2;
-      runTime = true;
-      vorlauf = true;
-    }
   }
 }
 
@@ -216,5 +200,53 @@ void cont_serial() {
   output += String(clock_displ);
 
   Serial1.println(output);
+}
+
+//Funktion für die Steuerung der Ampeltaster
+void cont_Inputs(){
+  char key = keypad.getKey();
+  if(key != NO_KEY && !startup){
+    //TASTER FUER STOPP
+    if(key == '1' && !vorlauf){
+      clock_time = 1;
+    }
+    //TASTER FUER START
+    if(key == '3' && !runTime){
+      firstRunFinished = !abcd;
+      clock_time = vorlaufzeit;
+      if(count_clock){
+        ab = !ab;
+      }
+      count_clock = true;
+      display_Ampel();
+      count_Horn = 2;
+      runTime = true;
+      vorlauf = true;
+      
+    }
+    //TASTER FUER AB/CD WECHSEL
+    if(key == '5'){
+      ab = !ab;
+    }
+    //TASTER FUER MENU
+    if (key == '*' && !runTime) {
+      //MENU EINBLENDEN
+      display_Startup();
+      print_Display();
+    }
+    //TASTER FUER HALT
+    if(key == '0'){
+      count_clock = !count_clock;
+      if(count_clock){
+        count_Horn = 1;
+      }
+      else{
+        count_Horn = 5;
+        state_Red = true;
+        state_Yellow = false;
+        state_Green = false;
+      }
+    }
+  }
 }
 

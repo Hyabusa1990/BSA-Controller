@@ -35,11 +35,11 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 // ********************************************************************* 
 String strDisplay[LCD_ROW];
 bool change_strDisplay = false;
-Timer tim_initial;      //Timer für initial Bildschirm
-Timer tim_counter;      //Timer für zähler
-Timer tim_update;       //Timer für Schnittstellen update
-Timer tim_ampel;        //Timer für Ampel update
-Timer tim_horn;         //Timer für Horn
+Timer tim_initial;      //Timer fÃ¼r initial Bildschirm
+Timer tim_counter;      //Timer fÃ¼r zÃ¤hler
+Timer tim_update;       //Timer fÃ¼r Schnittstellen update
+Timer tim_ampel;        //Timer fÃ¼r Ampel update
+Timer tim_horn;         //Timer fÃ¼r Horn
 
 bool initial = false;
 
@@ -84,11 +84,10 @@ void loop() {
   cont_schuss();
   cont_vorlauf();
   print_Display();
+  cont_Inputs();
   tim_initial.update();
   tim_counter.update();
   tim_ampel.update();
   tim_horn.update();
   tim_update.update();
 }
-
-

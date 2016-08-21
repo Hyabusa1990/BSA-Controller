@@ -160,10 +160,11 @@ void display_Ampel() {
   strDisplay[2] += String(schusszeit);
 
   if (!runTime) {
-    strDisplay[3] = "Menue mit #";
+    strDisplay[3] = "Menue mit *";
   }
   else {
     strDisplay[3] = "       ";
   }
 }
+
 
